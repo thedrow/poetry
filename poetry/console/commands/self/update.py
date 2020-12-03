@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import hashlib
 import os
 import re
@@ -13,6 +11,8 @@ from functools import cmp_to_key
 from gzip import GzipFile
 from typing import TYPE_CHECKING
 from typing import Any
+from urllib.error import HTTPError
+from urllib.request import urlopen
 
 from cleo import argument
 from cleo import option
@@ -27,16 +27,7 @@ if TYPE_CHECKING:
     from poetry.core.semver import Version
     from poetry.utils._compat import Path
 
-
-try:
-    from urllib.error import HTTPError
-    from urllib.request import urlopen
-except ImportError:
-    from urllib2 import HTTPError
-    from urllib2 import urlopen
-
-
-BIN = """# -*- coding: utf-8 -*-
+BIN = """\
 import glob
 import sys
 import os
