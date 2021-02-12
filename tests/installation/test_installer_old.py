@@ -120,7 +120,7 @@ def installer(package, pool, locker, env, installed, config):
 
 
 def fixture(name):
-    file = TOMLFile(Path(__file__).parent / "fixtures" / "{}.test".format(name))
+    file = TOMLFile(Path(__file__).parent / "fixtures" / f"{name}.test")
 
     return file.read()
 
@@ -339,7 +339,7 @@ def test_run_install_remove_untracked(installer, locker, repo, package, installe
     assert len(updates) == 0
 
     removals = installer.installer.removals
-    assert set(r.name for r in removals) == {"b", "c"}
+    assert {r.name for r in removals} == {"b", "c"}
 
 
 def test_run_whitelist_add(installer, locker, repo, package):

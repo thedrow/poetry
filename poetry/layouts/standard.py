@@ -5,7 +5,7 @@ from .layout import Layout
 
 if TYPE_CHECKING:
     from poetry.utils._compat import Path  # noqa
-DEFAULT = u"""__version__ = '{version}'
+DEFAULT = """__version__ = '{version}'
 """
 
 

@@ -182,7 +182,7 @@ class Provider:
         cls, vcs, url, branch=None, tag=None, rev=None, name=None
     ):  # type: (str, str, Optional[str], Optional[str], Optional[str], Optional[str]) -> Package
         if vcs != "git":
-            raise ValueError("Unsupported VCS dependency {}".format(vcs))
+            raise ValueError(f"Unsupported VCS dependency {vcs}")
 
         tmp_dir = Path(
             mkdtemp(prefix="pypoetry-git-{}".format(url.split("/")[-1].rstrip(".git")))
@@ -249,7 +249,7 @@ class Provider:
             )
         except PackageInfoError:
             raise RuntimeError(
-                "Unable to determine package info from path: {}".format(file_path)
+                f"Unable to determine package info from path: {file_path}"
             )
 
         return package
@@ -534,7 +534,7 @@ class Provider:
                 dependencies.append(deps[0])
                 continue
 
-            self.debug("<debug>Duplicate dependencies for {}</debug>".format(dep_name))
+            self.debug(f"<debug>Duplicate dependencies for {dep_name}</debug>")
 
             # Regrouping by constraint
             by_constraint = dict()

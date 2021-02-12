@@ -48,7 +48,7 @@ class PyPiRepository(RemoteRepository):
     def __init__(
         self, url="https://pypi.org/", disable_cache=False, fallback=True
     ):  # type: (str, bool, bool) -> None
-        super(PyPiRepository, self).__init__(url.rstrip("/") + "/simple/")
+        super().__init__(url.rstrip("/") + "/simple/")
 
         self._base_url = url
         self._disable_cache = disable_cache
@@ -205,9 +205,9 @@ class PyPiRepository(RemoteRepository):
         )
 
     def _get_package_info(self, name):  # type: (str) -> dict
-        data = self._get("pypi/{}/json".format(name))
+        data = self._get(f"pypi/{name}/json")
         if data is None:
-            raise PackageNotFound("Package [{}] not found.".format(name))
+            raise PackageNotFound(f"Package [{name}] not found.")
 
         return data
 
@@ -222,24 +222,24 @@ class PyPiRepository(RemoteRepository):
             return PackageInfo.load(self._get_release_info(name, version))
 
         cached = self._cache.remember_forever(
-            "{}:{}".format(name, version), lambda: self._get_release_info(name, version)
+            f"{name}:{version}", lambda: self._get_release_info(name, version)
         )
 
         cache_version = cached.get("_cache_version", "0.0.0")
         if parse_constraint(cache_version) != self.CACHE_VERSION:
             # The cache must be updated
             self._log(
-                "The cache for {} {} is outdated. Refreshing.".format(name, version),
+                f"The cache for {name} {version} is outdated. Refreshing.",
                 level="debug",
             )
             cached = self._get_release_info(name, version)
 
-            self._cache.forever("{}:{}".format(name, version), cached)
+            self._cache.forever(f"{name}:{version}", cached)
 
         return PackageInfo.load(cached)
 
     def find_links_for_package(self, package):  # type: (Package) -> List[Link]
-        json_data = self._get("pypi/{}/{}/json".format(package.name, package.version))
+        json_data = self._get(f"pypi/{package.name}/{package.version}/json")
         if json_data is None:
             return []
 
@@ -251,11 +251,11 @@ class PyPiRepository(RemoteRepository):
         return links
 
     def _get_release_info(self, name, version):  # type: (str, str) -> dict
-        self._log("Getting info for {} ({}) from PyPI".format(name, version), "debug")
+        self._log(f"Getting info for {name} ({version}) from PyPI", "debug")
 
-        json_data = self._get("pypi/{}/{}/json".format(name, version))
+        json_data = self._get(f"pypi/{name}/{version}/json")
         if json_data is None:
-            raise PackageNotFound("Package [{}] not found.".format(name))
+            raise PackageNotFound(f"Package [{name}] not found.")
 
         info = json_data["info"]
 
@@ -373,14 +373,14 @@ class PyPiRepository(RemoteRepository):
 
                         return info
 
-                    py2_requires_dist = set(
+                    py2_requires_dist = {
                         dependency_from_pep_508(r).to_pep_508()
                         for r in info.requires_dist
-                    )
-                    py3_requires_dist = set(
+                    }
+                    py3_requires_dist = {
                         dependency_from_pep_508(r).to_pep_508()
                         for r in py3_info.requires_dist
-                    )
+                    }
                     base_requires_dist = py2_requires_dist & py3_requires_dist
                     py2_only_requires_dist = py2_requires_dist - py3_requires_dist
                     py3_only_requires_dist = py3_requires_dist - py2_requires_dist
@@ -455,4 +455,4 @@ class PyPiRepository(RemoteRepository):
         return download_file(url, dest, session=self.session)
 
     def _log(self, msg, level="info"):  # type: (str, str) -> None
-        getattr(logger, level)("<debug>{}:</debug> {}".format(self._name, msg))
+        getattr(logger, level)(f"<debug>{self._name}:</debug> {msg}")

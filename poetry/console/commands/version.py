@@ -49,7 +49,7 @@ patch, minor, major, prepatch, preminor, premajor, prerelease.
             )
 
             if self.option("short"):
-                self.line("{}".format(version))
+                self.line(f"{version}")
             else:
                 self.line(
                     "Bumping version from <b>{}</> to <fg=green>{}</>".format(
@@ -64,7 +64,7 @@ patch, minor, major, prepatch, preminor, premajor, prerelease.
             self.poetry.file.write(content)
         else:
             if self.option("short"):
-                self.line("{}".format(self.poetry.package.pretty_version))
+                self.line(f"{self.poetry.package.pretty_version}")
             else:
                 self.line(
                     "<comment>{}</> <info>{}</>".format(

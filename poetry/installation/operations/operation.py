@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from poetry.core.packages import Package  # noqa
 
 
-class Operation(object):
+class Operation:
     def __init__(self, reason=None, priority=0):  # type: (Optional[str], int) -> None
         self._reason = reason
 

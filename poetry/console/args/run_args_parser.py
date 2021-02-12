@@ -19,7 +19,7 @@ class RunArgsParser(DefaultArgsParser):
         builder.set_arguments(*fmt.get_arguments().values())
         fmt = builder.format
 
-        return super(RunArgsParser, self).parse(args, fmt, True)
+        return super().parse(args, fmt, True)
 
     def _parse(
         self, raw_args, fmt, lenient

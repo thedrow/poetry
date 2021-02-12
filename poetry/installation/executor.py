@@ -38,7 +38,7 @@ if TYPE_CHECKING:
     from .operations import OperationTypes  # noqa
 
 
-class Executor(object):
+class Executor:
     def __init__(
         self, env, pool, config, io, parallel=None
     ):  # type: ("Env", "Pool", "Config", "IO", bool) -> None
@@ -282,7 +282,7 @@ class Executor(object):
 
             return 0
 
-        result = getattr(self, "_execute_{}".format(method))(operation)
+        result = getattr(self, f"_execute_{method}")(operation)
 
         if result != 0:
             return result
@@ -413,9 +413,7 @@ class Executor(object):
                 "" if updates == 1 else "s",
                 uninstalls,
                 "" if uninstalls == 1 else "s",
-                ", <info>{}</> skipped".format(skipped)
-                if skipped and self._verbose
-                else "",
+                f", <info>{skipped}</> skipped" if skipped and self._verbose else "",
             )
         )
         self._io.write_line("")
@@ -621,7 +619,7 @@ class Executor(object):
             archive_hash = "sha256:" + FileDependency(package.name, archive).hash()
             if archive_hash not in {f["hash"] for f in package.files}:
                 raise RuntimeError(
-                    "Invalid hash for {} using archive {}".format(package, archive.name)
+                    f"Invalid hash for {package} using archive {archive.name}"
                 )
 
         return archive

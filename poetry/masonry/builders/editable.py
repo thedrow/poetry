@@ -37,7 +37,7 @@ WINDOWS_CMD_TEMPLATE = """\
 
 class EditableBuilder(Builder):
     def __init__(self, poetry, env, io):  # type: ("Poetry", "Env", "IO") -> None
-        super(EditableBuilder, self).__init__(poetry)
+        super().__init__(poetry)
 
         self._env = env
         self._io = io
@@ -65,7 +65,7 @@ class EditableBuilder(Builder):
         self._add_dist_info(added_files)
 
     def _run_build_script(self, build_script):  # type: (Path) -> None
-        self._debug("  - Executing build script: <b>{}</b>".format(build_script))
+        self._debug(f"  - Executing build script: <b>{build_script}</b>")
         self._env.run("python", str(self._path.joinpath(build_script)), call=True)
 
     def _setup_build(self):  # type: () -> None

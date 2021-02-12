@@ -51,7 +51,7 @@ def temporary_directory(*args, **kwargs):  # type: (*Any, **Any) -> Iterator[str
 
 
 def get_cert(config, repository_name):  # type: (Config, str) -> Optional[Path]
-    cert = config.get("certificates.{}.cert".format(repository_name))
+    cert = config.get(f"certificates.{repository_name}.cert")
     if cert:
         return Path(cert)
     else:
@@ -59,7 +59,7 @@ def get_cert(config, repository_name):  # type: (Config, str) -> Optional[Path]
 
 
 def get_client_cert(config, repository_name):  # type: (Config, str) -> Optional[Path]
-    client_cert = config.get("certificates.{}.client-cert".format(repository_name))
+    client_cert = config.get(f"certificates.{repository_name}.client-cert")
     if client_cert:
         return Path(client_cert)
     else:
@@ -128,7 +128,7 @@ def is_dir_writable(path, create=False):  # type: (Path, bool) -> bool
 
         with tempfile.TemporaryFile(dir=str(path)):
             pass
-    except (IOError, OSError):
+    except OSError:
         return False
     else:
         return True

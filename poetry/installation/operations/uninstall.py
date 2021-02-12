@@ -12,7 +12,7 @@ class Uninstall(Operation):
     def __init__(
         self, package, reason=None, priority=float("inf")
     ):  # type: ("Package", Optional[str], int) -> None
-        super(Uninstall, self).__init__(reason, priority=priority)
+        super().__init__(reason, priority=priority)
 
         self._package = package
 

@@ -1,7 +1,7 @@
 from typing import Any
 
 
-class ConfigSource(object):
+class ConfigSource:
     def add_property(self, key, value):  # type: (str, Any) -> None
         raise NotImplementedError()
 

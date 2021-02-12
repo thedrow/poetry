@@ -99,11 +99,9 @@ class Incompatibility:
         """
         if isinstance(self._cause, ConflictCause):
             cause = self._cause  # type: ConflictCause
-            for incompatibility in cause.conflict.external_incompatibilities:
-                yield incompatibility
+            yield from cause.conflict.external_incompatibilities
 
-            for incompatibility in cause.other.external_incompatibilities:
-                yield incompatibility
+            yield from cause.other.external_incompatibilities
         else:
             yield self
 
@@ -130,7 +128,7 @@ class Incompatibility:
 
             cause = self._cause  # type: PythonCause
             text = "{} requires ".format(self._terse(self._terms[0], allow_every=True))
-            text += "Python {}".format(cause.python_version)
+            text += f"Python {cause.python_version}"
 
             return text
         elif isinstance(self._cause, PlatformCause):
@@ -139,7 +137,7 @@ class Incompatibility:
 
             cause = self._cause  # type: PlatformCause
             text = "{} requires ".format(self._terse(self._terms[0], allow_every=True))
-            text += "platform {}".format(cause.platform)
+            text += f"platform {cause.platform}"
 
             return text
         elif isinstance(self._cause, NoVersionsCause):
@@ -195,7 +193,7 @@ class Incompatibility:
                         else self._terse(term2)
                     )
 
-                    return "{} is incompatible with {}".format(package1, package2)
+                    return f"{package1} is incompatible with {package2}"
                 else:
                     return "either {} or {}".format(
                         self._terse(term1), self._terse(term2)
@@ -291,14 +289,14 @@ class Incompatibility:
         else:
             buffer.append("requires")
 
-        buffer.append(" both {}".format(this_negatives))
+        buffer.append(f" both {this_negatives}")
         if this_line is not None:
-            buffer.append(" ({})".format(this_line))
+            buffer.append(f" ({this_line})")
 
-        buffer.append(" and {}".format(other_negatives))
+        buffer.append(f" and {other_negatives}")
 
         if other_line is not None:
-            buffer.append(" ({})".format(other_line))
+            buffer.append(f" ({other_line})")
 
         return "".join(buffer)
 
@@ -347,7 +345,7 @@ class Incompatibility:
         buffer = []
         if len(prior_positives) > 1:
             prior_string = " or ".join([self._terse(term) for term in prior_positives])
-            buffer.append("if {} then ".format(prior_string))
+            buffer.append(f"if {prior_string} then ")
         else:
             if isinstance(prior.cause, DependencyCause):
                 verb = "depends on"
@@ -360,7 +358,7 @@ class Incompatibility:
 
         buffer.append(self._terse(prior_negative))
         if prior_line is not None:
-            buffer.append(" ({})".format(prior_line))
+            buffer.append(f" ({prior_line})")
 
         buffer.append(" which ")
 
@@ -376,7 +374,7 @@ class Incompatibility:
         )
 
         if latter_line is not None:
-            buffer.append(" ({})".format(latter_line))
+            buffer.append(f" ({latter_line})")
 
         return "".join(buffer)
 
@@ -409,7 +407,7 @@ class Incompatibility:
         buffer = []
         if len(positives) > 1:
             prior_string = " or ".join([self._terse(term) for term in positives])
-            buffer.append("if {} then ".format(prior_string))
+            buffer.append(f"if {prior_string} then ")
         else:
             buffer.append(self._terse(positives[0], allow_every=True))
             if isinstance(prior.cause, DependencyCause):
@@ -419,11 +417,11 @@ class Incompatibility:
 
         buffer.append(self._terse(latter.terms[0]) + " ")
         if prior_line is not None:
-            buffer.append("({}) ".format(prior_line))
+            buffer.append(f"({prior_line}) ")
 
         if isinstance(latter.cause, PythonCause):
             cause = latter.cause  # type: PythonCause
-            buffer.append("which requires Python {}".format(cause.python_version))
+            buffer.append(f"which requires Python {cause.python_version}")
         elif isinstance(latter.cause, NoVersionsCause):
             buffer.append("which doesn't match any versions")
         elif isinstance(latter.cause, PackageNotFoundCause):
@@ -432,13 +430,13 @@ class Incompatibility:
             buffer.append("which is forbidden")
 
         if latter_line is not None:
-            buffer.append(" ({})".format(latter_line))
+            buffer.append(f" ({latter_line})")
 
         return "".join(buffer)
 
     def _terse(self, term, allow_every=False):  # type: (Term, bool) -> str
         if allow_every and term.constraint.is_any():
-            return "every version of {}".format(term.dependency.complete_name)
+            return f"every version of {term.dependency.complete_name}"
 
         return str(term.dependency)
 

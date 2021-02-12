@@ -10,4 +10,4 @@ class NullIO(IOMixin, BaseNullIO):
     """
 
     def __init__(self, *args, **kwargs):  # type: (*Any, **Any) -> None
-        super(NullIO, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)

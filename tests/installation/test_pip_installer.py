@@ -67,7 +67,7 @@ def test_requirement_source_type_url():
     )
 
     result = installer.requirement(foo, formatted=True)
-    expected = "{}#egg={}".format(foo.source_url, foo.name)
+    expected = f"{foo.source_url}#egg={foo.name}"
 
     assert expected == result
 
@@ -216,4 +216,4 @@ def test_uninstall_git_package_nspkg_pth_cleanup(mocker, tmp_venv, pool):
 
     # any command in the virtual environment should trigger the error message
     output = tmp_venv.run("python", "-m", "site")
-    assert "Error processing line 1 of {}".format(pth_file_candidate) not in output
+    assert f"Error processing line 1 of {pth_file_candidate}" not in output

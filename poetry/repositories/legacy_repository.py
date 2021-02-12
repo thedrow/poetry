@@ -308,7 +308,7 @@ class LegacyRepository(PyPiRepository):
 
             return self._packages[index]
         except ValueError:
-            package = super(LegacyRepository, self).package(name, version, extras)
+            package = super().package(name, version, extras)
             package._source_type = "legacy"
             package._source_url = self._url
             package._source_reference = self.name
@@ -325,7 +325,7 @@ class LegacyRepository(PyPiRepository):
     def _get_release_info(self, name, version):  # type: (str, str) -> dict
         page = self._get("/{}/".format(canonicalize_name(name).replace(".", "-")))
         if page is None:
-            raise PackageNotFound('No package named "{}"'.format(name))
+            raise PackageNotFound(f'No package named "{name}"')
 
         data = PackageInfo(
             name=name,
@@ -382,8 +382,7 @@ class LegacyRepository(PyPiRepository):
 
         if response.status_code in (401, 403):
             self._log(
-                "Authorization error accessing {url}".format(url=response.url),
-                level="warn",
+                f"Authorization error accessing {response.url}", level="warn",
             )
             return
 

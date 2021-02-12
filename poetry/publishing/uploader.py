@@ -50,7 +50,7 @@ class UploadError(Exception):
             )
         else:
             message = str(error)
-        super(UploadError, self).__init__(message)
+        super().__init__(message)
 
 
 class Uploader:
@@ -90,9 +90,7 @@ class Uploader:
                 )
             )
         )
-        tars = list(
-            dist.glob("{}-{}.tar.gz".format(self._package.pretty_name, version))
-        )
+        tars = list(dist.glob(f"{self._package.pretty_name}-{version}.tar.gz"))
 
         return sorted(wheels + tars)
 
@@ -256,9 +254,7 @@ class Uploader:
             )
             encoder = MultipartEncoder(data_to_send)
             bar = self._io.progress_bar(encoder.len)
-            bar.set_format(
-                " - Uploading <c1>{0}</c1> <b>%percent%%</b>".format(file.name)
-            )
+            bar.set_format(f" - Uploading <c1>{file.name}</c1> <b>%percent%%</b>")
             monitor = MultipartEncoderMonitor(
                 encoder, lambda monitor: bar.set_progress(monitor.bytes_read)
             )
@@ -277,7 +273,7 @@ class Uploader:
                     )
                 if dry_run or 200 <= resp.status_code < 300:
                     bar.set_format(
-                        " - Uploading <c1>{0}</c1> <fg=green>%percent%%</>".format(
+                        " - Uploading <c1>{}</c1> <fg=green>%percent%%</>".format(
                             file.name
                         )
                     )
@@ -285,7 +281,7 @@ class Uploader:
                 elif resp.status_code == 301:
                     if self._io.output.supports_ansi():
                         self._io.overwrite(
-                            " - Uploading <c1>{0}</c1> <error>{1}</>".format(
+                            " - Uploading <c1>{}</c1> <error>{}</>".format(
                                 file.name, "FAILED"
                             )
                         )
@@ -296,7 +292,7 @@ class Uploader:
             except (requests.ConnectionError, requests.HTTPError) as e:
                 if self._io.output.supports_ansi():
                     self._io.overwrite(
-                        " - Uploading <c1>{0}</c1> <error>{1}</>".format(
+                        " - Uploading <c1>{}</c1> <error>{}</>".format(
                             file.name, "FAILED"
                         )
                     )
@@ -318,7 +314,7 @@ class Uploader:
         )
 
         if not file.exists():
-            raise RuntimeError('"{0}" does not exist.'.format(file.name))
+            raise RuntimeError(f'"{file.name}" does not exist.')
 
         data = self.post_data(file)
         data.update({":action": "submit", "protocol_version": "1"})

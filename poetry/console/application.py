@@ -37,7 +37,7 @@ if TYPE_CHECKING:
 
 class Application(BaseApplication):
     def __init__(self):  # type: () -> None
-        super(Application, self).__init__(
+        super().__init__(
             "poetry", __version__, config=ApplicationConfig("poetry", __version__)
         )
 
@@ -62,7 +62,7 @@ class Application(BaseApplication):
                 "See <fg=blue>https://python-poetry.org/docs/managing-environments/</> "
                 "for more information."
             ).format(python_version, poetry_feature_release, python_version)
-            self._preliminary_io.error_line("<fg=yellow>{}</>\n".format(message))
+            self._preliminary_io.error_line(f"<fg=yellow>{message}</>\n")
 
     @property
     def poetry(self):  # type: () -> "Poetry"

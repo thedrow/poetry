@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from poetry.repositories import Pool  # noqa
 
 
-class VersionSelector(object):
+class VersionSelector:
     def __init__(self, pool):  # type: ("Pool") -> None
         self._pool = pool
 
@@ -80,4 +80,4 @@ class VersionSelector(object):
             if parsed.is_prerelease():
                 version += "-{}".format(".".join(str(p) for p in parsed.prerelease))
 
-        return "^{}".format(version)
+        return f"^{version}"

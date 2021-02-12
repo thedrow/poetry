@@ -86,7 +86,7 @@ class Solver:
                 )
                 self._provider.debug(
                     "Resolved with overrides: {}".format(
-                        ", ".join("({})".format(b) for b in self._overrides)
+                        ", ".join(f"({b})" for b in self._overrides)
                     )
                 )
 
@@ -290,7 +290,7 @@ class Solver:
         return final_packages, depths
 
 
-class DFSNode(object):
+class DFSNode:
     def __init__(
         self, id, name, base_name
     ):  # type: (Tuple[str, str, bool], str, str) -> None
@@ -388,7 +388,7 @@ class PackageNode(DFSNode):
             self.category = dep.category
             self.optional = dep.is_optional()
 
-        super(PackageNode, self).__init__(
+        super().__init__(
             (package.complete_name, self.category, self.optional),
             package.complete_name,
             package.name,

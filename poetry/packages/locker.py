@@ -44,7 +44,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class Locker(object):
+class Locker:
 
     _VERSION = "1.1"
 
@@ -463,7 +463,7 @@ class Locker(object):
         try:
             lock_data = self._lock.read()
         except TOMLKitError as e:
-            raise RuntimeError("Unable to read the lock file ({}).".format(e))
+            raise RuntimeError(f"Unable to read the lock file ({e}).")
 
         lock_version = Version.parse(lock_data["metadata"].get("lock-version", "1.0"))
         current_version = Version.parse(self._VERSION)

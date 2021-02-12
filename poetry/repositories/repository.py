@@ -19,7 +19,7 @@ class Repository(BaseRepository):
     def __init__(
         self, packages=None, name=None
     ):  # type: (List["Package"], str) -> None
-        super(Repository, self).__init__()
+        super().__init__()
 
         self._name = name
 

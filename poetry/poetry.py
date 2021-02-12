@@ -21,7 +21,7 @@ class Poetry(BasePoetry):
         locker,  # type: Locker
         config,  # type: Config
     ):
-        super(Poetry, self).__init__(file, local_config, package)
+        super().__init__(file, local_config, package)
 
         self._locker = locker
         self._config = config

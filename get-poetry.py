@@ -33,7 +33,6 @@ from contextlib import contextmanager
 from functools import cmp_to_key
 from gzip import GzipFile
 from io import UnsupportedOperation
-from io import open
 from urllib.error import HTTPError
 from urllib.request import Request
 from urllib.request import urlopen
@@ -406,7 +405,7 @@ class Installer:
         )
 
         if self._version and self._version not in releases:
-            print(colorize("error", "Version {} does not exist.".format(self._version)))
+            print(colorize("error", f"Version {self._version} does not exist."))
 
             return None, None
 
@@ -544,25 +543,25 @@ class Installer:
         if platform == "linux2":
             platform = "linux"
 
-        url = self._base_url + "{}/".format(version)
-        name = "poetry-{}-{}.tar.gz".format(version, platform)
-        checksum = "poetry-{}-{}.sha256sum".format(version, platform)
+        url = self._base_url + f"{version}/"
+        name = f"poetry-{version}-{platform}.tar.gz"
+        checksum = f"poetry-{version}-{platform}.sha256sum"
 
         try:
-            r = urlopen(url + "{}".format(checksum))
+            r = urlopen(url + f"{checksum}")
         except HTTPError as e:
             if e.code == 404:
-                raise RuntimeError("Could not find {} file".format(checksum))
+                raise RuntimeError(f"Could not find {checksum} file")
 
             raise
 
         checksum = r.read().decode()
 
         try:
-            r = urlopen(url + "{}".format(name))
+            r = urlopen(url + f"{name}")
         except HTTPError as e:
             if e.code == 404:
-                raise RuntimeError("Could not find {} file".format(name))
+                raise RuntimeError(f"Could not find {name} file")
 
             raise
 
@@ -662,7 +661,7 @@ class Installer:
             if WINDOWS:
                 python_executable = "python"
 
-            f.write("#!/usr/bin/env {}\n".format(python_executable))
+            f.write(f"#!/usr/bin/env {python_executable}\n")
             f.write(BIN)
 
         if not WINDOWS:
@@ -693,14 +692,14 @@ class Installer:
         # Updating any profile we can on UNIX systems
         export_string = self.get_export_string()
 
-        addition = "\n{}\n".format(export_string)
+        addition = f"\n{export_string}\n"
 
         profiles = self.get_unix_profiles()
         for profile in profiles:
             if not os.path.exists(profile):
                 continue
 
-            with open(profile, "r") as f:
+            with open(profile) as f:
                 content = f.read()
 
             if addition not in content:
@@ -728,8 +727,8 @@ class Installer:
                 ["fish", "-c", "echo $fish_user_paths"]
             ).decode("utf-8")
             if POETRY_BIN not in fish_user_paths:
-                cmd = "set -U fish_user_paths {} $fish_user_paths".format(POETRY_BIN)
-                set_fish_user_path = ["fish", "-c", "{}".format(cmd)]
+                cmd = f"set -U fish_user_paths {POETRY_BIN} $fish_user_paths"
+                set_fish_user_path = ["fish", "-c", f"{cmd}"]
                 subprocess.check_output(set_fish_user_path)
         else:
             print(
@@ -744,7 +743,7 @@ class Installer:
     def add_to_windows_path(self):
         try:
             old_path = self.get_windows_path_var()
-        except WindowsError:
+        except OSError:
             old_path = None
 
         if old_path is None:
@@ -817,7 +816,7 @@ class Installer:
             cmd = "set -U fish_user_paths (string match -v {} $fish_user_paths)".format(
                 POETRY_BIN
             )
-            set_fish_user_path = ["fish", "-c", "{}".format(cmd)]
+            set_fish_user_path = ["fish", "-c", f"{cmd}"]
             subprocess.check_output(set_fish_user_path)
 
     def remove_from_windows_path(self):
@@ -836,14 +835,14 @@ class Installer:
         # Updating any profile we can on UNIX systems
         export_string = self.get_export_string()
 
-        addition = "{}\n".format(export_string)
+        addition = f"{export_string}\n"
 
         profiles = self.get_unix_profiles()
         for profile in profiles:
             if not os.path.exists(profile):
                 continue
 
-            with open(profile, "r") as f:
+            with open(profile) as f:
                 content = f.readlines()
 
             if addition not in content:
@@ -864,7 +863,7 @@ class Installer:
 
     def get_export_string(self):
         path = POETRY_BIN.replace(os.getenv("HOME", ""), "$HOME")
-        export_string = 'export PATH="{}:$PATH"'.format(path)
+        export_string = f'export PATH="{path}:$PATH"'
 
         return export_string
 

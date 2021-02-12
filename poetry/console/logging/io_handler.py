@@ -13,7 +13,7 @@ class IOHandler(logging.Handler):
     def __init__(self, io):  # type: ("IO") -> None
         self._io = io
 
-        super(IOHandler, self).__init__()
+        super().__init__()
 
     def emit(self, record):  # type: ("LogRecord") -> None
         try:

@@ -20,7 +20,7 @@ class Assignment(Term):
     def __init__(
         self, dependency, is_positive, decision_level, index, cause=None
     ):  # type: ("Dependency", bool, int, int, Optional["Incompatibility"]) -> None
-        super(Assignment, self).__init__(dependency, is_positive)
+        super().__init__(dependency, is_positive)
 
         self._decision_level = decision_level
         self._index = index

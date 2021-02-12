@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from poetry.core.packages import Package  # noqa
 
 
-class BaseRepository(object):
+class BaseRepository:
     def __init__(self):  # type: () -> None
         self._packages = []
 

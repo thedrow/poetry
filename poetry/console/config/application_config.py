@@ -35,7 +35,7 @@ from poetry.mixology.solutions.providers import PythonRequirementSolutionProvide
 
 class ApplicationConfig(BaseApplicationConfig):
     def configure(self):  # type: () -> None
-        super(ApplicationConfig, self).configure()
+        super().configure()
 
         self.add_style(Style("c1").fg("cyan"))
         self.add_style(Style("c2").fg("default").bold())
@@ -114,7 +114,7 @@ class ApplicationConfig(BaseApplicationConfig):
         env = env_manager.create_venv(io)
 
         if env.is_venv() and io.is_verbose():
-            io.write_line("Using virtualenv: <comment>{}</>".format(env.path))
+            io.write_line(f"Using virtualenv: <comment>{env.path}</>")
 
         command.set_env(env)
 
@@ -159,9 +159,7 @@ class ApplicationConfig(BaseApplicationConfig):
                 # We weren't able to resolve the command,
                 # due to a parse error most likely,
                 # so we fall back on the default behavior
-                return super(ApplicationConfig, self).resolve_help_command(
-                    event, event_name, dispatcher
-                )
+                return super().resolve_help_command(event, event_name, dispatcher)
 
             # If the current command is the run one, skip option
             # check and interpret them as part of the executed command

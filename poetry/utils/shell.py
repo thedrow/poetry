@@ -77,7 +77,7 @@ class Shell:
         activate_script = self._get_activate_script()
         bin_dir = "Scripts" if WINDOWS else "bin"
         activate_path = env.path / bin_dir / activate_script
-        c.sendline("{} {}".format(self._get_source_command(), activate_path))
+        c.sendline(f"{self._get_source_command()} {activate_path}")
 
         def resize(sig, data):  # type: (Any, Any) -> None
             terminal = Terminal()
@@ -114,4 +114,4 @@ class Shell:
         return "."
 
     def __repr__(self):  # type: () -> str
-        return '{}("{}", "{}")'.format(self.__class__.__name__, self._name, self._path)
+        return f'{self.__class__.__name__}("{self._name}", "{self._path}")'

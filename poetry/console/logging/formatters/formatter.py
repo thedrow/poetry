@@ -1,6 +1,6 @@
 import logging
 
 
-class Formatter(object):
+class Formatter:
     def format(self, record):  # type: (logging.LogRecord) -> str
         raise NotImplementedError()
